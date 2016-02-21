@@ -1,0 +1,87 @@
+﻿@using Bernie.Server.Core
+@model Bernie.Server.Model.SystemModel
+@{
+    ViewData["Title"] = "Bernie";
+}
+
+@section Head {
+    <meta http-equiv="refresh" content="10">
+}
+
+<div class="text-center">
+    @if (Model.State == SecuritySystemState.Armed)
+    {
+        using (Html.BeginForm("Disarm", "System"))
+        {
+            @Html.AntiForgeryToken()
+
+            <button type="submit" class="btn btn-danger">
+                <i class="fa fa-lock fa-5x fa-fw"></i>
+                <p>Armed</p>
+            </button>
+        }
+    }
+
+    @if (Model.State == SecuritySystemState.Disarmed)
+    {
+        using (Html.BeginForm("Arm", "System"))
+        {
+            @Html.AntiForgeryToken()
+
+            <button class="btn btn-success">
+                <i class="fa fa-unlock fa-5x fa-fw"></i>
+                <p>Disarmed</p>
+            </button>
+        }
+    }
+
+</div>
+
+<hr/>
+
+@foreach (var e in Model.Events.OrderByDescending(o => o.When))
+{
+    <div class="pull-left">
+        @switch (e.Category)
+        {
+            case LogCategory.Disarmed:
+                <i class="fa fa-fw fa-2x fa-unlock" style="color: #5cb85c"></i>
+                break;
+            case LogCategory.Armed:
+                <i class="fa fa-fw fa-2x fa-lock" style="color: #5cb85c"></i>
+                break;
+            case LogCategory.IntruderWarning:
+                <i class="fa fa-fw fa-2x fa-user-secret" style="color: #f0ad4e"></i>
+                break;
+            case LogCategory.Alarm:
+                <i class="fa fa-fw fa-2x fa-bell" style="color: #d9534f"></i>
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    </div>
+    <div>
+        <p style="margin-bottom: 30px; margin-left: 50px;">
+            @if (e.Category == LogCategory.IntruderWarning)
+            {
+                <span class="text-warning">
+                    @e.Message
+                </span>
+            }
+            else if (e.Category == LogCategory.Alarm)
+            {
+                <span class="text-danger">
+                    @e.Message
+                </span>
+            }
+            else
+            {
+                <span>@e.Message</span>
+            }
+
+            <span class="when">
+                <time datetime="@e.When.ToString("O")"></time>
+            </span>
+        </p>
+    </div>
+}

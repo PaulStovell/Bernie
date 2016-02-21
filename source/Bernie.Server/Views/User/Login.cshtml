@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Enter Passcode";
+}
+
+@section Head {
+}
+
+
+@using (Html.BeginForm("Login", "User", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary()
+
+    <div class="text-center">
+        <div class="form-group">
+            <label class="sr-only" for="passcodeInput">Passcode</label>
+            <input type="password" class="form-control passcode" id="passcodeInput" name="passcode" placeholder="Passcode">
+        </div>
+
+        <hr/>
+
+        <button type="submit" class="btn btn-success btn-lg">Authenticate</button>
+    </div>
+
+}
+
