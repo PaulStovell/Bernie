@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Net;
+using System.Net.Http;
 using Bernie.Server.Core;
+using Bernie.Server.Model;
 using Microsoft.AspNet.Mvc;
-
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Bernie.Server.Controllers
 {
@@ -13,16 +10,23 @@ namespace Bernie.Server.Controllers
     public class SensorsController : Controller
     {
         private readonly ISecuritySystem securitySystem;
+        private readonly ISensorAuthenticator sensorAuthenticator;
 
-        public SensorsController(ISecuritySystem securitySystem)
+        public SensorsController(ISecuritySystem securitySystem, ISensorAuthenticator sensorAuthenticator)
         {
             this.securitySystem = securitySystem;
+            this.sensorAuthenticator = sensorAuthenticator;
         }
 
         [HttpPost]
-        public void Post([FromBody]string rule, [FromBody]string sensor)
+        public HttpResponseMessage Post([FromQuery]string token, [FromForm]string rule, [FromForm]string sensor)
         {
+            if (!sensorAuthenticator.AuthenticateToken(token))
+                return new HttpResponseMessage(HttpStatusCode.Forbidden);
+
             securitySystem.MotionDetected(sensor);
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }

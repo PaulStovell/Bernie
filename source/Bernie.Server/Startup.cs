@@ -1,4 +1,5 @@
 ﻿using Bernie.Server.Core;
+using Bernie.Server.Model;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
@@ -26,6 +27,9 @@ namespace Bernie.Server
         {
             services.AddMvc();
             services.AddAntiforgery();
+
+            services.AddInstance<ISensorAuthenticator>(new SensorAuthenticator(Configuration["SensorAuthentication:UrlToken"]));
+            services.AddInstance<IUserAuthenticator>(new UserAuthenticator(Configuration.GetSection("UserAuthentication")));
 
             var clock = new SystemClock();
             var log = new SystemLog();

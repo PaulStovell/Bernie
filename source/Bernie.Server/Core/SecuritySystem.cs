@@ -39,13 +39,13 @@ namespace Bernie.Server.Core
         public void Arm(string who)
         {
             State = SecuritySystemState.Armed;
-            log.Append(LogCategory.Armed, $"System was armed by ${who}");
+            log.Append(LogCategory.Armed, $"System was armed by {who}");
         }
 
         public void Disarm(string who)
         {
             State = SecuritySystemState.Disarmed;
-            log.Append(LogCategory.Disarmed, $"System was disarmed by ${who}");
+            log.Append(LogCategory.Disarmed, $"System was disarmed by {who}");
         }
 
         public void MotionDetected(string sensor)
@@ -71,7 +71,7 @@ namespace Bernie.Server.Core
                 return;
 
             notificationService.RaiseWarning();
-            log.Append(LogCategory.IntruderWarning, $"Intruder detected in ${sensorName}. Sending a warning message. Alarm will sound in 30 seconds.");
+            log.Append(LogCategory.IntruderWarning, $"Intruder detected in {sensorName}. Sending a warning message. Alarm will sound in 30 seconds.");
         }
 
         private void RaiseAlarm()
