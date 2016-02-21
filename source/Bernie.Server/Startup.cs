@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bernie.Server.Core;
+﻿using Bernie.Server.Core;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
@@ -65,68 +62,5 @@ namespace Bernie.Server
         }
         
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
-    }
-
-    public class NotificationService : INotificationService
-    {
-        public void RaiseWarning()
-        {
-            Console.WriteLine("WARNING");
-        }
-
-        public void RaiseAlarm()
-        {
-            Console.WriteLine("ALARM");
-        }
-
-        public void Cancel()
-        {
-
-        }
-    }
-
-    public interface IRecentEventLog
-    {
-        List<LogEvent> GetRecentEvents();
-    }
-
-    public class SystemLog : ILog, IRecentEventLog
-    {
-        private readonly Queue<LogEvent> recentEvents = new Queue<LogEvent>();
-
-        public void Append(LogCategory category, string message)
-        {
-            recentEvents.Enqueue(new LogEvent(DateTimeOffset.UtcNow, category, message));
-        }
-
-        public List<LogEvent> GetRecentEvents()
-        {
-            return recentEvents.ToList();
-        }
-    }
-
-    public class SystemClock : IClock
-    {
-        public DateTimeOffset Now => DateTimeOffset.UtcNow;
-
-        public IDisposable In(TimeSpan timespan, Action callback)
-        {
-            callback();
-            return null;
-        }
-    }
-
-    public class LogEvent
-    {
-        public LogEvent(DateTimeOffset when, LogCategory category, string message)
-        {
-            When = when;
-            Category = category;
-            Message = message;
-        }
-
-        public DateTimeOffset When { get; }
-        public LogCategory Category { get; set; }
-        public string Message { get; }
     }
 }
