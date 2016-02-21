@@ -22,7 +22,7 @@ namespace Bernie.Server.Controllers
         [HttpPost]
         public void Post([FromBody]string rule, [FromBody]string sensor)
         {
-            securitySystem.MotionDetected();
+            securitySystem.MotionDetected(sensor);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Bernie.Server.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Disarm()
         {
-            securitySystem.Disarm();
+            securitySystem.Disarm(HttpContext.User.Identity.Name);
 
             return RedirectToAction("Index");
         }
@@ -46,7 +46,7 @@ namespace Bernie.Server.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Arm()
         {
-            securitySystem.Arm();
+            securitySystem.Arm(HttpContext.User.Identity.Name);
 
             return RedirectToAction("Index");
         }

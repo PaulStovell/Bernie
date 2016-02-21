@@ -9,7 +9,7 @@ namespace Bernie.Server.Core
         private readonly INotificationService notificationService;
         private SecuritySystemState state;
         private IDisposable countdown;
-        private readonly Throttle warningThrottle = new Throttle(TimeSpan.FromMinutes(5));
+        private readonly Throttle warningThrottle = new Throttle(TimeSpan.FromMinutes(1));
         private readonly Throttle alarmThrottle = new Throttle(TimeSpan.FromHours(1));
 
         public SecuritySystem(IClock clock, ILog log, INotificationService notificationService)
@@ -36,33 +36,24 @@ namespace Bernie.Server.Core
             }
         }
 
-        public void Arm()
+        public void Arm(string who)
         {
             State = SecuritySystemState.Armed;
-            log.Append(LogCategory.Armed, "System was armed");
+            log.Append(LogCategory.Armed, $"System was armed by ${who}");
         }
 
-        public void Disarm()
+        public void Disarm(string who)
         {
             State = SecuritySystemState.Disarmed;
-            log.Append(LogCategory.Disarmed, "System was disarmed");
+            log.Append(LogCategory.Disarmed, $"System was disarmed by ${who}");
         }
 
-        public void RaiseAlarm()
-        {
-            if (alarmThrottle.ShouldRaise(clock.Now))
-            {
-                notificationService.RaiseAlarm();
-                log.Append(LogCategory.Alarm, "Intruder detected, alarm not deactivated in time. Alarm raised.");
-            }
-        }
-
-        public void MotionDetected()
+        public void MotionDetected(string sensor)
         {
             if (!IsArmed)
                 return;
 
-            SendWarning();
+            SendWarning(sensor);
 
             countdown = clock.In(TimeSpan.FromSeconds(30), () =>
             {
@@ -74,13 +65,22 @@ namespace Bernie.Server.Core
 
         private bool IsArmed => state == SecuritySystemState.Armed;
 
-        private void SendWarning()
+        private void SendWarning(string sensorName)
         {
-            if (warningThrottle.ShouldRaise(clock.Now))
-            {
-                notificationService.RaiseWarning();
-                log.Append(LogCategory.IntruderWarning, "Intruder detected. Sending a warning message. Alarm will sound in 30 seconds.");
-            }
+            if (!warningThrottle.ShouldRaise(clock.Now))
+                return;
+
+            notificationService.RaiseWarning();
+            log.Append(LogCategory.IntruderWarning, $"Intruder detected in ${sensorName}. Sending a warning message. Alarm will sound in 30 seconds.");
+        }
+
+        private void RaiseAlarm()
+        {
+            if (!alarmThrottle.ShouldRaise(clock.Now))
+                return;
+
+            notificationService.RaiseAlarm();
+            log.Append(LogCategory.Alarm, "Alarm not deactivated in time after intruder was detected. Alarm flashing, siren sounded.");
         }
     }
 }
