@@ -14,16 +14,13 @@
     text-align: center;
 }
 
-.passcode {
-    font-size: 20pt;
-    height: 60px;
-    vertical-align: middle;
-    text-align: center;
-}
-
 .when {
     display: block;
     margin-top: 2px;
     font-size: 80%;
     color: #999;
+}
+
+.validation-summary-errors {
+    color: #d9534f;
 }

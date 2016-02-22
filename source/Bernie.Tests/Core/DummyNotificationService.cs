@@ -9,12 +9,12 @@ namespace Bernie.Tests.Core
         public int AlarmsRaised { get; private set; }
         public int WarningsRaised { get; private set; }
 
-        public void RaiseWarning()
+        public void RaiseWarning(string sensor)
         {
             IsRaisingWarning = true;
             WarningsRaised++;
         }
-
+        
         public void RaiseAlarm()
         {
             IsRaisingAlarm = true;

@@ -2,7 +2,7 @@
 {
     public interface INotificationService
     {
-        void RaiseWarning();
+        void RaiseWarning(string sensor);
         void RaiseAlarm();
         void Cancel();
     }

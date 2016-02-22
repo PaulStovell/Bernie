@@ -15,8 +15,8 @@
         {
             @Html.AntiForgeryToken()
 
-            <button type="submit" class="btn btn-danger">
-                <i class="fa fa-lock fa-5x fa-fw"></i>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-lock fa-fw" style="font-size: 144px"></i>
                 <p>Armed</p>
             </button>
         }
@@ -29,7 +29,7 @@
             @Html.AntiForgeryToken()
 
             <button class="btn btn-success">
-                <i class="fa fa-unlock fa-5x fa-fw"></i>
+                <i class="fa fa-unlock fa-fw" style="font-size: 144px"></i>
                 <p>Disarmed</p>
             </button>
         }
@@ -84,4 +84,20 @@
             </span>
         </p>
     </div>
+}
+
+@if (Model.Events.Count > 4)
+{
+    using (Html.BeginForm("Clear", "System"))
+    {
+        @Html.AntiForgeryToken()
+
+        <hr/>
+
+        <div class="text-center">
+            <button class="btn btn-link">
+                Clear
+            </button>
+        </div>
+    }
 }

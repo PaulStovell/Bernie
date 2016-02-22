@@ -6,16 +6,18 @@
 }
 
 
-@using (Html.BeginForm("Login", "User", FormMethod.Post))
+@using (Html.BeginForm("SignIn", "User", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+
+    <h1>Sign in</h1>
 
     @Html.ValidationSummary()
 
     <div class="text-center">
         <div class="form-group">
             <label class="sr-only" for="usernameInput">Username</label>
-            <input type="password" class="form-control passcode" id="usernameInput" name="username" placeholder="Username">
+            <input type="text" class="form-control passcode" id="usernameInput" name="username" placeholder="Username">
         </div>
 
         <div class="form-group">
@@ -25,7 +27,7 @@
 
         <hr/>
 
-        <button type="submit" class="btn btn-success btn-lg">Authenticate</button>
+        <button type="submit" class="btn btn-success btn-lg">Sign in</button>
     </div>
 
 }

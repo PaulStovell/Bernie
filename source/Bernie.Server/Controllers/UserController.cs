@@ -17,14 +17,14 @@ namespace Bernie.Server.Controllers
             this.userAuthenticator = userAuthenticator;
         }
 
-        public IActionResult Login()
+        public IActionResult SignIn()
         {
             return View();
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> SignIn(string username, string password)
         {
             if (!userAuthenticator.Authenticate(username, password))
             {
@@ -42,6 +42,14 @@ namespace Bernie.Server.Controllers
                 IsPersistent = true
             });
 
+            return RedirectToAction("Index", "System");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignOut()
+        {
+            await HttpContext.Authentication.SignOutAsync("BernieCookie");
             return RedirectToAction("Index", "System");
         }
     }

@@ -3,8 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - Bernie.Server</title>
+        <title>@ViewData["Title"]</title>
 
+        <link rel="apple-touch-icon" sizes="144x144" href="images/bernie.png" />
+        <link rel="shortcut icon" type="image/png" href="images/bernie.png" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-flash.css" />
@@ -15,6 +17,22 @@
     <body>
         <div class="container body-content">
             @RenderBody()
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                using (Html.BeginForm("SignOut", "User"))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <hr />
+
+                    <div class="text-center">
+                        <button class="btn btn-link">
+                            Sign out
+                        </button>
+                    </div>
+                }
+            }
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

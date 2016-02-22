@@ -28,7 +28,8 @@ namespace Bernie.Server.Controllers
             return View(model);
         }
 
-        public IActionResult Error()
+        [AllowAnonymous]
+        public IActionResult Error(string id = null)
         {
             return View();
         }
@@ -47,6 +48,15 @@ namespace Bernie.Server.Controllers
         public IActionResult Arm()
         {
             securitySystem.Arm(HttpContext.User.Identity.Name);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Clear()
+        {
+            recentEvents.Clear();
 
             return RedirectToAction("Index");
         }

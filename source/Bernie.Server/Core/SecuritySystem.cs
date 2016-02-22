@@ -70,7 +70,7 @@ namespace Bernie.Server.Core
             if (!warningThrottle.ShouldRaise(clock.Now))
                 return;
 
-            notificationService.RaiseWarning();
+            notificationService.RaiseWarning(sensorName);
             log.Append(LogCategory.IntruderWarning, $"Intruder detected in {sensorName}. Sending a warning message. Alarm will sound in 30 seconds.");
         }
 
